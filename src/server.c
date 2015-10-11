@@ -2610,7 +2610,11 @@ int snr_resolution_cb(struct dns_resolution *resolution, struct dns_nameserver *
 			goto stop_resolution;
 
 		case DNS_UPD_SRVIP_NOT_FOUND:
-			goto save_ip;
+			if (s->state == SRV_ST_STOPPED) {
+				goto save_ip;
+			} else {
+				goto stop_resolution;
+			}
 
 		case DNS_UPD_CNAME:
 			if (resolution->status != RSLV_STATUS_VALID) {
